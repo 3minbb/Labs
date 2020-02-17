@@ -116,7 +116,7 @@ double maximum(double x, double y)
 {
 	 return max(x, y);
 }
-double task5(double x, double y, string z)
+double calculate(double x, double y, string z)
 {
 	
 	if (z == "add")
@@ -140,7 +140,7 @@ int main()
 	//task2();
 	//task3();
 	//task4();
-	double k = task5(2.5, 10., "max");
+	double k = calculate(2.5, 10., "max");
 	cout << k;
 	return 0;
 }
