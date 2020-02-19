@@ -127,7 +127,7 @@ int main()
 	//task2();
 	//task3();
 	//task4();
-	double k = calculate(2.5, 10., maximum);
+	double k = calculate(2.5, 10., add);
 	cout << k;
 	return 0;
 }
