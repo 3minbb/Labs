@@ -30,6 +30,7 @@ void task1()
 	}
 	cout << tolikoioioioi;
 }
+
 void task2() 
 {
 	double* mas = new double[10];
@@ -59,6 +60,7 @@ void task2()
 	cout << count;
 	delete[] mas;
 }
+
 void task3() 
 {
 	string text;
@@ -94,6 +96,7 @@ void task3()
 	cout << "consonant count = " << consonant << endl;
 	cout << "other count = " << other;
 }
+
 void task4() 
 {
 	ifstream file;
@@ -104,6 +107,7 @@ void task4()
 	cout << count;
 	file.close();
 }
+
 double add(double x, double y) 
 {
 	return x + y;
@@ -120,14 +124,25 @@ double calculate(double x, double y, double (*f)(double x, double y))
 {
 	return f(x, y);
 }
-
+void calculateArray(double x, double y, double (*ptrFunc[3])(double, double))
+{
+	double result;
+	for (int i = 0; i < 3; i++)
+	{
+		result = ptrFunc[i](x, y);
+		cout << result << endl;
+	}
+}
 int main()
 {
-	//task1();
-	//task2();
-	//task3();
-	//task4();
-	double k = calculate(2.5, 10., add);
-	cout << k;
+		//task1();
+		//task2();
+		//task3();
+		//task4();
+		//double k = calculate(2.5, 10., add);
+		//cout << k;
+
+		double (*ptrFunc[3])(double, double) = { add, multiplication, maximum };
+		calculateArray(10, 5, ptrFunc);
 	return 0;
 }
