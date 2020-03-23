@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <string>
 #include <Windows.h>
-#include <map>
 #include <vector>
 using namespace std;
 CONST short button1 = 0;
