@@ -5,10 +5,10 @@
 #include <Windows.h>
 #include <vector>
 using namespace std;
-CONST short button1 = 0;
-CONST short button2 = 1;
-CONST short button3 = 2;
-CONST short button4 = 3;
+CONST short MainMenu = 0;
+CONST short button1 = 1;
+CONST short button2 = 2;
+CONST short button3 = 3;
 CONST int CountOfMenu = 4;
 CONST int CountOfButtons = 3;
 string mas[CountOfMenu][CountOfButtons] = {
@@ -85,15 +85,15 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 			ACTUALMENUPOSITION = index;
 		}
 		else if (GetAsyncKeyState(VK_ESCAPE)) {
-			if (variantofmap == button2 || variantofmap == button3 || variantofmap == button4)
+			if (variantofmap == button1 || variantofmap == button2 || variantofmap == button3)
 				defaultt();
 		}
 		else if (GetAsyncKeyState(VK_RETURN))
 		{
 			if (variantofmap == button1) {
-				if (posy == 10) Buttons(button2);
-				if (posy == 11) Buttons(button3);
-				if (posy == 12) Buttons(button4);
+				if (posy == 10) Buttons(button1);
+				if (posy == 11) Buttons(button2);
+				if (posy == 12) Buttons(button3);
 			}
 		}
 	}
@@ -109,7 +109,7 @@ void defaultt() {
 	}
 	short ACTUALMENUPOSITION = 0;
 	pos.Y = 10;
-	peremeshenie(0, ACTUALMENUPOSITION, pos.X, pos.Y, button1);
+	peremeshenie(0, ACTUALMENUPOSITION, pos.X, pos.Y, MainMenu);
 }
 int main()
 {
