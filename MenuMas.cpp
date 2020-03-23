@@ -90,7 +90,7 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 		}
 		else if (GetAsyncKeyState(VK_RETURN))
 		{
-			if (variantofmap == button1) {
+			if (variantofmap == MainMenu) {
 				if (posy == 10) Buttons(button1);
 				if (posy == 11) Buttons(button2);
 				if (posy == 12) Buttons(button3);
