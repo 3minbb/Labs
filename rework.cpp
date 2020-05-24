@@ -12,7 +12,7 @@
 #include <vector>
 using namespace std;
 
-void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy, string* textredactor, int countofsymbols, int i, int stroka, int starstroka, int beforestar, char** starredact, int countofstring);
+void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy, string* textredactor, int countofsymbols, int starstroka, int beforestar, char** starredact);
 string* increase(string* textredactor, int newSize)
 {
 	string* newArr = new string[newSize];
@@ -61,11 +61,11 @@ int main()
 	starredact = new char* [40];
 	for (i = 0; i < 40; i++)
 		starredact[i] = new char[N];
-	peremeshenie(0, ACTUALMENUPOSITION, pos.X, pos.Y, textredactor, countofsymbols, 20, 1, 2, 2, starredact, countofstring);
+	peremeshenie(0, ACTUALMENUPOSITION, pos.X, pos.Y, textredactor, countofsymbols, 2, 2, starredact);
 	system("Pause");
 	return 0;
 }
-void navigate(short beforeposition, short afterposition, short& posx, short& posy, string* textredactor, int i, int& starstroka, int& beforestar, char** starredact, int& nowstring)
+void navigate(short beforeposition, short afterposition, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring)
 {
 	string s;
 	string news;
@@ -101,7 +101,7 @@ void navigate(short beforeposition, short afterposition, short& posx, short& pos
 	cout << news;
 	Sleep(500u);
 }
-void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy, string* textredactor, int countofsymbols, int i, int stroka, int starstroka, int beforestar, char** starredact, int countofstring) {
+void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy, string* textredactor, int countofsymbols, int starstroka, int beforestar, char** starredact) {
 	starredact[0][1] = '*';
 	int nowstring = 1;
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -109,6 +109,7 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 	SetConsoleCursorPosition(hOut, star);
 	cout << starredact[0][1];
 	int x;
+	int countofstring;
 	while (true)
 	{
 		x = _getch();
@@ -119,7 +120,7 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 					nowstring++;
 					index = ACTUALMENUPOSITION;
 					starstroka = beforestar + 1;
-					navigate(ACTUALMENUPOSITION, index, posx, posy, textredactor, i, starstroka, beforestar, starredact, nowstring);
+					navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 					index += 20;
 					ACTUALMENUPOSITION = index;
 					beforestar = starstroka;
@@ -131,7 +132,7 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 					nowstring--;
 					index = ACTUALMENUPOSITION;
 					starstroka = beforestar - 1;
-					navigate(ACTUALMENUPOSITION, index, posx, posy, textredactor, i, starstroka, beforestar, starredact, nowstring);
+					navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 					index -= 20;
 					ACTUALMENUPOSITION = index;
 					beforestar = starstroka;
@@ -142,7 +143,7 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 				if (index != (countofsymbols - 1)) {
 					index = ACTUALMENUPOSITION + 1;
 					if ((ACTUALMENUPOSITION + 1) % 20 == 0 && ACTUALMENUPOSITION != 0) starstroka++;
-					navigate(ACTUALMENUPOSITION, index, posx, posy, textredactor, i, starstroka, beforestar, starredact, nowstring);
+					navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 					ACTUALMENUPOSITION = index;
 					beforestar = starstroka;
 				}
@@ -152,7 +153,7 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 				if (index != 0) {
 					index = ACTUALMENUPOSITION - 1;
 					if (ACTUALMENUPOSITION % 20 == 0) starstroka--;
-					navigate(ACTUALMENUPOSITION, index, posx, posy, textredactor, i, starstroka, beforestar, starredact, nowstring);
+					navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 					ACTUALMENUPOSITION = index;
 					beforestar = starstroka;
 				}
@@ -164,6 +165,11 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 				fout << textredactor[i];
 			}
 			fout.close();
+				for (int i = 0; i < 40; i++)
+				{
+					delete[] starredact[i];
+				}
+			delete[] starredact;
 			exit(EXIT_SUCCESS);
 		}
 		else if (isprint(x)) {
@@ -196,7 +202,7 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 			if (index != (countofsymbols - 1)) {
 				index = ACTUALMENUPOSITION + 1;
 				if ((ACTUALMENUPOSITION + 1) % 20 == 0 && ACTUALMENUPOSITION != 0) starstroka++;
-				navigate(ACTUALMENUPOSITION, index, posx, posy, textredactor, i, starstroka, beforestar, starredact, nowstring);
+				navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 				ACTUALMENUPOSITION = index;
 				beforestar = starstroka;
 			}
