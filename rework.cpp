@@ -11,8 +11,61 @@
 #include <conio.h>
 #include <vector>
 using namespace std;
-
+const short down = 80;
+const short rightt = 77;
+const short up = 72;
+const short leftt = 75;
+const short save = 27;
+const short  backspace = 8;
 void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy, string* textredactor, int countofsymbols, int starstroka, int beforestar, char** starredact);
+void navigate(short beforeposition, short afterposition, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring);
+void downg(short& ACTUALMENUPOSITION,short& index,short& posx,short& posy,int& starstroka,int& beforestar,char** starredact,int& nowstring) {
+	nowstring++;
+	index = ACTUALMENUPOSITION;
+	starstroka = beforestar + 1;
+	navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
+	index += 20;
+	ACTUALMENUPOSITION = index;
+	beforestar = starstroka;
+}
+void upg(short& ACTUALMENUPOSITION, short& index, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring) {
+	nowstring--;
+	index = ACTUALMENUPOSITION;
+	starstroka = beforestar - 1;
+	navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
+	index -= 20;
+	ACTUALMENUPOSITION = index;
+	beforestar = starstroka;
+}
+void rightg(short& ACTUALMENUPOSITION, short& index, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring) {
+	index = ACTUALMENUPOSITION + 1;
+	if ((ACTUALMENUPOSITION + 1) % 20 == 0 && ACTUALMENUPOSITION != 0) starstroka++;
+	navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
+	ACTUALMENUPOSITION = index;
+	beforestar = starstroka;
+}
+void leftg(short& ACTUALMENUPOSITION, short& index, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring) {
+	if (index != 0) {
+		index = ACTUALMENUPOSITION - 1;
+		if (ACTUALMENUPOSITION % 20 == 0) starstroka--;
+		navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
+		ACTUALMENUPOSITION = index;
+		beforestar = starstroka;
+	}
+}
+void saveg(int countofsymbols, string* textredactor, char** starredact) {
+	ofstream fout("F:\\textred.txt");
+	for (int i = 0; i < countofsymbols; i++) {
+		fout << textredactor[i];
+	}
+	fout.close();
+	for (int i = 0; i < 40; i++)
+	{
+		delete[] starredact[i];
+	}
+	delete[] starredact;
+	exit(EXIT_SUCCESS);
+}
 string* increase(string* textredactor, int newSize)
 {
 	string* newArr = new string[newSize];
@@ -115,62 +168,30 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 		x = _getch();
 		if (x == 224) {
 			x = _getch();
-			if (x == 80) {
+			if (x == down) {
 				if ((index + 20) < countofsymbols) {
-					nowstring++;
-					index = ACTUALMENUPOSITION;
-					starstroka = beforestar + 1;
-					navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
-					index += 20;
-					ACTUALMENUPOSITION = index;
-					beforestar = starstroka;
+					downg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 				}
 			}
-			else if (x == 72)
+			else if (x == up)
 			{
 				if (nowstring > 1 && index < countofsymbols) {
-					nowstring--;
-					index = ACTUALMENUPOSITION;
-					starstroka = beforestar - 1;
-					navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
-					index -= 20;
-					ACTUALMENUPOSITION = index;
-					beforestar = starstroka;
+					upg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 				}
 			}
-			else if (x == 77)
+			else if (x == rightt)
 			{
 				if (index != (countofsymbols - 1)) {
-					index = ACTUALMENUPOSITION + 1;
-					if ((ACTUALMENUPOSITION + 1) % 20 == 0 && ACTUALMENUPOSITION != 0) starstroka++;
-					navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
-					ACTUALMENUPOSITION = index;
-					beforestar = starstroka;
+					rightg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 				}
 			}
-			else if (x == 75)
+			else if (x == leftt)
 			{
-				if (index != 0) {
-					index = ACTUALMENUPOSITION - 1;
-					if (ACTUALMENUPOSITION % 20 == 0) starstroka--;
-					navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
-					ACTUALMENUPOSITION = index;
-					beforestar = starstroka;
-				}
+				leftg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 			}
 		}
-		else if (x==27) {
-			ofstream fout("F:\\textred.txt");
-			for (int i = 0; i < countofsymbols; i++) {
-				fout << textredactor[i];
-			}
-			fout.close();
-				for (int i = 0; i < 40; i++)
-				{
-					delete[] starredact[i];
-				}
-			delete[] starredact;
-			exit(EXIT_SUCCESS);
+		else if (x == save) {
+			saveg(countofsymbols, textredactor, starredact);
 		}
 		else if (isprint(x)) {
 			string temp;
@@ -207,7 +228,7 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 				beforestar = starstroka;
 			}
 		}
-		else if (x == 8) {
+		else if (x == backspace) {
 			string temp;
 			int counter;
 			for (counter = 0; counter < index; counter++)
