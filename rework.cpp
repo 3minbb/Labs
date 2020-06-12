@@ -11,17 +11,11 @@
 #include <conio.h>
 #include <vector>
 using namespace std;
-const short stringsymbols = 20;
 string mas[2] = {
 	{"*Open file*"},
 	{" Create new file "}
 };
-const short down = 80;
-const short rightt = 77;
-const short up = 72;
-const short leftt = 75;
-const short save = 27;
-const short  backspace = 8;
+enum magicnumbers{ down = 80, rightt = 77, up = 72, leftt = 75, save = 27, backspace = 8, stringsymbols = 20};
 string file_name;
 void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy, string* textredactor, int countofsymbols, int starstroka, int beforestar, char** starredact);
 void navigate(short beforeposition, short afterposition, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring);
