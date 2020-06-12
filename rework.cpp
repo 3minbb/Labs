@@ -25,8 +25,8 @@ const short  backspace = 8;
 string file_name;
 void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy, string* textredactor, int countofsymbols, int starstroka, int beforestar, char** starredact);
 void navigate(short beforeposition, short afterposition, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring);
-void open_file(string& s, char& temp);
-void new_file(string& s, char& temp);
+void openFile(string& s, char& temp);
+void newFile(string& s, char& temp);
 void filechange(string& s, char& temp);
 void filenavigate(short beforeposition, short afterposition, short& posx, short& posy)
 {
@@ -57,7 +57,7 @@ void filenavigate(short beforeposition, short afterposition, short& posx, short&
 	pos = { posx, posy };
 	SetConsoleCursorPosition(hOut, pos);
 	cout << news << endl;
-	Sleep(500u);
+	Sleep(150);
 }
 void filemenu(short index, short ACTUALMENUPOSITION, short posx, short posy, string& s, char& temp) {
 	while (true)
@@ -79,19 +79,19 @@ void filemenu(short index, short ACTUALMENUPOSITION, short posx, short posy, str
 		else if (GetAsyncKeyState(VK_RETURN))
 		{
 			if (posy == 10) {
-				 open_file(s, temp);
+				 openFile(s, temp);
 				 system("cls");
 				 break;
 			}
 			if (posy == 11) { 
-				new_file(s, temp);
+				newFile(s, temp);
 				system("cls");
 				break;
 			}
 		}
 	}
 }
-void open_file(string& s, char& temp) {
+void openFile(string& s, char& temp) {
 	//"F:\\textred.txt"
 	system("cls");
 	cout << "Enter file name: "; cin >> file_name;
@@ -111,7 +111,7 @@ void open_file(string& s, char& temp) {
 	while (text >> temp)
 		s += temp;
 }
-void new_file(string& s, char& temp) {
+void newFile(string& s, char& temp) {
 	s = " ";
 }
 void filechange(string& s, char& temp) {
@@ -130,41 +130,34 @@ void filechange(string& s, char& temp) {
 
 }
 
-void downg(short& ACTUALMENUPOSITION,short& index,short& posx,short& posy,int& starstroka,int& beforestar,char** starredact,int& nowstring) {
+void downGo(short& ACTUALMENUPOSITION,short& index,short& posx,short& posy,int& starstroka,int& beforestar,char** starredact,int& nowstring) {
 	nowstring++;
 	index = ACTUALMENUPOSITION;
 	starstroka = beforestar + 1;
 	navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 	index += stringsymbols;
-	ACTUALMENUPOSITION = index;
-	beforestar = starstroka;
+	
 }
-void upg(short& ACTUALMENUPOSITION, short& index, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring) {
+void upGo(short& ACTUALMENUPOSITION, short& index, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring) {
 	nowstring--;
 	index = ACTUALMENUPOSITION;
 	starstroka = beforestar - 1;
 	navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 	index -= stringsymbols;
-	ACTUALMENUPOSITION = index;
-	beforestar = starstroka;
 }
-void rightg(short& ACTUALMENUPOSITION, short& index, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring) {
+void rightGo(short& ACTUALMENUPOSITION, short& index, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring) {
 	index = ACTUALMENUPOSITION + 1;
 	if ((ACTUALMENUPOSITION + 1) % stringsymbols == 0 && ACTUALMENUPOSITION != 0) starstroka++;
 	navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
-	ACTUALMENUPOSITION = index;
-	beforestar = starstroka;
 }
-void leftg(short& ACTUALMENUPOSITION, short& index, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring) {
+void leftGo(short& ACTUALMENUPOSITION, short& index, short& posx, short& posy, int& starstroka, int& beforestar, char** starredact, int& nowstring) {
 	if (index != 0) {
 		index = ACTUALMENUPOSITION - 1;
 		if (ACTUALMENUPOSITION % stringsymbols == 0) starstroka--;
 		navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
-		ACTUALMENUPOSITION = index;
-		beforestar = starstroka;
 	}
 }
-void saveg(int countofsymbols, string* textredactor, char** starredact) {
+void saveGo(int countofsymbols, string* textredactor, char** starredact) {
 	if (file_name[0] == '\0') {
 		system("cls");
 		cout << "Enter file name: "; 
@@ -262,7 +255,7 @@ void navigate(short beforeposition, short afterposition, short& posx, short& pos
 	star = { posx, posy + 1 };
 	SetConsoleCursorPosition(hOut, star);
 	cout << news;
-	Sleep(300u);
+	Sleep(50);
 }
 void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy, string* textredactor, int countofsymbols, int starstroka, int beforestar, char** starredact) {
 	starredact[0][1] = '*';
@@ -280,28 +273,30 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 			x = _getch();
 			if (x == down) {
 				if ((index + stringsymbols) < countofsymbols) {
-					downg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
+					downGo(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 				}
 			}
 			else if (x == up)
 			{
 				if (nowstring > 1 && index < countofsymbols) {
-					upg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
+					upGo(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 				}
 			}
 			else if (x == rightt)
 			{
 				if (index != (countofsymbols - 1)) {
-					rightg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
+					rightGo(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 				}
 			}
 			else if (x == leftt)
 			{
-				leftg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
+				leftGo(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 			}
+			ACTUALMENUPOSITION = index;
+			beforestar = starstroka;
 		}
 		else if (x == save) {
-			saveg(countofsymbols, textredactor, starredact);
+			saveGo(countofsymbols, textredactor, starredact);
 		}
 		else if (isprint(x)) {
 			string temp;
@@ -339,7 +334,7 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 		}
 		else if (x == backspace && countofsymbols != 1) {
 			system("cls");
-			star = { posx, posy + 1 };
+			star = { posx , posy + 1 };
 			SetConsoleCursorPosition(hOut, star);
 			cout << "*";
 			string temp;
@@ -368,6 +363,7 @@ void peremeshenie(short index, short ACTUALMENUPOSITION, short posx, short posy,
 				cout << textredactor[i];
 				pos.X++;
 			}
+			//leftg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 			/*i++;
 			if (i % stringsymbols == 0 && i != 0) {
 				pos.X = 40;
