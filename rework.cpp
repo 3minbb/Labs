@@ -152,18 +152,23 @@ void leftGo(short& ACTUALMENUPOSITION, short& posx, short& posy, int& starstroka
 		navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 	}
 }
-void saveGo(int countofsymbols, string* textredactor) {
+void saveGo(int countofsymbols, string* textredactor, char** starredact) {
 	system("cls");
 	if (file_name[0] == '\0') {
 		//system("cls");
 		cout << "Enter file name: "; 
 		cin >> file_name;
 	}
+	for (int i = 0; i < N; i++) {
+		delete[] starredact[i];
+	}
+	delete[] starredact;
 	ofstream fout(file_name);
 	for (int i = 0; i < countofsymbols; i++) {
 		fout << textredactor[i];
 	}
 	fout.close();
+	delete[] textredactor;
 	exit(EXIT_SUCCESS);
 }
 string* increase(string* textredactor, int newSize)
@@ -216,6 +221,8 @@ void navigate(short beforeposition, short afterposition, short& posx, short& pos
 {
 	string s;
 	string news;
+	beforeposition = beforeposition % 40;
+	afterposition = afterposition % 40;
 	s = starredact[beforestar][beforeposition] = ' ';
 	news = starredact[starstroka][afterposition] = '*';
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -243,6 +250,10 @@ void navigate(short beforeposition, short afterposition, short& posx, short& pos
 	else if (beforestar > starstroka) {
 		posy -= 2;
 	}
+	if (afterposition == 0 && beforeposition == 39)
+		posx = 40;
+	if (afterposition == 39 && beforeposition == 0)
+		posx = 59;
 	star = { posx, posy + 1 };
 	SetConsoleCursorPosition(hOut, star);
 	cout << news;
@@ -288,7 +299,7 @@ void peremeshenie(short ACTUALMENUPOSITION, short posx, short posy, string* text
 		}
 		else if (x == save) {
 			delete[] starredact;
-			saveGo(countofsymbols, textredactor);
+			saveGo(countofsymbols, textredactor, starredact);
 		}
 		else if (isprint(x)) {
 			string temp;
@@ -326,9 +337,7 @@ void peremeshenie(short ACTUALMENUPOSITION, short posx, short posy, string* text
 		}
 		else if (x == backspace && countofsymbols != 1) {
 			system("cls");
-			star = { posx , posy + 1 };
-			SetConsoleCursorPosition(hOut, star);
-			cout << "*";
+			
 			string temp;
 			int counter;
 			for (counter = 0; counter < index; counter++)
@@ -355,6 +364,11 @@ void peremeshenie(short ACTUALMENUPOSITION, short posx, short posy, string* text
 				cout << textredactor[i];
 				pos.X++;
 			}
+			star = { posx , posy + 1 };
+			SetConsoleCursorPosition(hOut, star);
+			cout << "*";
+			//index--;
+			//leftGo(ACTUALMENUPOSITION, posx, posy, starstroka, beforestar, starredact, nowstring);
 			//leftg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 			/*i++;
 			if (i % stringsymbols == 0 && i != 0) {
