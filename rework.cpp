@@ -303,7 +303,7 @@ void peremeshenie(short ACTUALMENUPOSITION, short posx, short posy, string* text
 		else if (isprint(x)) {
 			string temp;
 			int counter;
-			for (counter = 0; counter < index; counter++)
+			for (counter = 0; counter < index + 1; counter++)
 				temp += textredactor[counter];
 			temp += x;
 			for (; counter < countofsymbols; counter++)
@@ -334,20 +334,24 @@ void peremeshenie(short ACTUALMENUPOSITION, short posx, short posy, string* text
 				beforestar = starstroka;
 			}
 		}
-		else if (x == backspace && countofsymbols != 1) {
+		else if (x == backspace ) {
 			system("cls");
-			string temp;
-			int counter;
-			for (counter = 0; counter < index; counter++)
-				temp += textredactor[counter];
-			counter++;
-			for (; counter < countofsymbols; counter++)
-				temp += textredactor[counter];
-			countofsymbols--;
-			textredactor = (increase(textredactor, countofsymbols));
-			for (int i = 0; i < countofsymbols; i++)
-				textredactor[i] = temp[i];
-			countofstring = (temp.size() / 20) + 1;
+			if (countofsymbols != 1) {
+				string temp;
+				int counter;
+				for (counter = 0; counter < index; counter++)
+					temp += textredactor[counter];
+				counter++;
+				for (; counter < countofsymbols; counter++)
+					temp += textredactor[counter];
+				countofsymbols--;
+				textredactor = (increase(textredactor, countofsymbols));
+				for (int i = 0; i < countofsymbols; i++)
+					textredactor[i] = temp[i];
+				countofstring = (temp.size() / 20) + 1;
+			}
+			else
+				textredactor[0] = " ";
 			HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 			COORD pos = { 40, 10 };
 			int i;
@@ -370,23 +374,6 @@ void peremeshenie(short ACTUALMENUPOSITION, short posx, short posy, string* text
 				navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 				ACTUALMENUPOSITION = index;
 				beforestar = starstroka;
-			//index--;
-			//leftg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
-			/*i++;
-			if (i % stringsymbols == 0 && i != 0) {
-				pos.X = 40;
-				pos.Y++;
-				pos.Y++;
-			}
-			SetConsoleCursorPosition(hOut, pos);
-			cout << " ";
-			if ((countofsymbols+1) % 19 == 0 || ((countofsymbols+1) % stringsymbols) % 19 == 0) {
-				int del = (countofsymbols+2) / stringsymbols;
-				pos.Y = 10;
-				pos.X = 60;
-				SetConsoleCursorPosition(hOut, pos);
-				cout << " ";
-			}*/
 		}
 	}
 }
