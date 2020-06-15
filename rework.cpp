@@ -362,13 +362,14 @@ void peremeshenie(short ACTUALMENUPOSITION, short posx, short posy, string* text
 				cout << textredactor[i];
 				pos.X++;
 			}
-			index--;
+			if (index != 0)
+				index--;
 			if (index % N == 19) {
 				starstroka--;
 			}
-			navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
-			ACTUALMENUPOSITION = index;
-			beforestar = starstroka;
+				navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
+				ACTUALMENUPOSITION = index;
+				beforestar = starstroka;
 			//index--;
 			//leftg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 			/*i++;
