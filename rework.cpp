@@ -221,10 +221,10 @@ void navigate(short beforeposition, short afterposition, short& posx, short& pos
 {
 	string s;
 	string news;
-	beforeposition = beforeposition % 40;
-	afterposition = afterposition % 40;
-	s = starredact[beforestar][beforeposition] = ' ';
-	news = starredact[starstroka][afterposition] = '*';
+	//beforeposition = beforeposition % N;
+	//afterposition = afterposition % N;
+	s = starredact[beforestar][beforeposition %  N] = ' ';
+	news = starredact[starstroka][afterposition % N] = '*';
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD pos = { posx, posy };
 	COORD star = { posx, posy + 1 };
@@ -250,9 +250,9 @@ void navigate(short beforeposition, short afterposition, short& posx, short& pos
 	else if (beforestar > starstroka) {
 		posy -= 2;
 	}
-	if (afterposition == 0 && beforeposition == 39)
+	if (beforeposition == 19 && afterposition == 0)
 		posx = 40;
-	if (afterposition == 39 && beforeposition == 0)
+	if (beforeposition == 0 && afterposition == 19)
 		posx = 59;
 	star = { posx, posy + 1 };
 	SetConsoleCursorPosition(hOut, star);
@@ -298,7 +298,6 @@ void peremeshenie(short ACTUALMENUPOSITION, short posx, short posy, string* text
 			beforestar = starstroka;
 		}
 		else if (x == save) {
-			delete[] starredact;
 			saveGo(countofsymbols, textredactor, starredact);
 		}
 		else if (isprint(x)) {
@@ -337,7 +336,6 @@ void peremeshenie(short ACTUALMENUPOSITION, short posx, short posy, string* text
 		}
 		else if (x == backspace && countofsymbols != 1) {
 			system("cls");
-			
 			string temp;
 			int counter;
 			for (counter = 0; counter < index; counter++)
@@ -364,11 +362,14 @@ void peremeshenie(short ACTUALMENUPOSITION, short posx, short posy, string* text
 				cout << textredactor[i];
 				pos.X++;
 			}
-			star = { posx , posy + 1 };
-			SetConsoleCursorPosition(hOut, star);
-			cout << "*";
+			index--;
+			if (index % N == 19) {
+				starstroka--;
+			}
+			navigate(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
+			ACTUALMENUPOSITION = index;
+			beforestar = starstroka;
 			//index--;
-			//leftGo(ACTUALMENUPOSITION, posx, posy, starstroka, beforestar, starredact, nowstring);
 			//leftg(ACTUALMENUPOSITION, index, posx, posy, starstroka, beforestar, starredact, nowstring);
 			/*i++;
 			if (i % stringsymbols == 0 && i != 0) {
